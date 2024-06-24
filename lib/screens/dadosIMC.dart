@@ -29,15 +29,11 @@ class _dadosImcScreenState extends State<dadosImcScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sobre o IMC'),
+        title: const Text('Entenda os resultados'),
       ),
       body: Center(
         child: Column(
           children: [
-            const Text(
-              'Entenda o resultado',
-              style: TextStyle(fontSize: 22),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

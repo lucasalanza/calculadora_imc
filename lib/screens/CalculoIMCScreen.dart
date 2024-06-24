@@ -1,6 +1,7 @@
 import 'package:calculadora_imc/components/IMCCard.dart';
 import 'package:calculadora_imc/models/faixaImcModel.dart';
 import 'package:calculadora_imc/screens/HistoricoScreen.dart';
+import 'package:calculadora_imc/screens/dadosIMC.dart';
 import 'package:calculadora_imc/services/imcService.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -53,6 +54,10 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Calcular IMC para ',
+              style: TextStyle(fontSize: 22),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -85,7 +90,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
                       _loadData();
                     });
                   },
-                  child: const Text('Cadastrar Pessoa'),
+                  child: const Text('+ Pessoa'),
                 ),
               ],
             ),
@@ -144,14 +149,24 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          HistoricoScreen(pessoaId: selectedPessoa!.id),
-                    ),
+                        builder: (context) => const dadosImcScreen()),
                   );
                 },
-                child: const Text('Ver Histórico'),
+                child: const Text('Entenda os Resultados'),
               ),
             ],
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        HistoricoScreen(pessoaId: selectedPessoa!.id),
+                  ),
+                );
+              },
+              child: const Text('Ver Histórico'),
+            ),
           ],
         ),
       ),

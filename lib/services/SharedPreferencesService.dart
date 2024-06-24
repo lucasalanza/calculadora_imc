@@ -15,6 +15,13 @@ class SharedPreferencesService {
     await prefs.setStringList(pessoasKey, pessoasStringList);
   }
 
+  Future<void> savePessoas(List<PessoaModel> pessoas) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> jsonStringList =
+        pessoas.map((pessoa) => jsonEncode(pessoa.toJson())).toList();
+    await prefs.setStringList(pessoasKey, jsonStringList);
+  }
+
   Future<List<PessoaModel>> loadPessoas() async {
     final prefs = await SharedPreferences.getInstance();
     final pessoasStringList = prefs.getStringList(pessoasKey) ?? [];
@@ -26,10 +33,8 @@ class SharedPreferencesService {
   Future<void> deletePessoa(PessoaModel pessoa) async {
     final prefs = await SharedPreferences.getInstance();
     List<PessoaModel> pessoas = await loadPessoas();
-    pessoas.remove(pessoa);
-    final List<String> jsonStringList =
-        pessoas.map((pessoa) => jsonEncode(pessoa.toJson())).toList();
-    prefs.setStringList(pessoasKey, jsonStringList);
+    pessoas.removeWhere((p) => p.id == pessoa.id);
+    await savePessoas(pessoas);
   }
 
   Future<void> saveCalculos(List<CalculoIMCModel> calculos) async {
@@ -43,27 +48,27 @@ class SharedPreferencesService {
   Future<void> saveCalculo(CalculoIMCModel calculo) async {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? calculosStringList = prefs.getStringList(calculosKey);
-    calculosStringList?.add(jsonEncode(calculo.toJson()));
-    await prefs.setStringList(calculosKey, calculosStringList ?? []);
+    final newCalculoString = jsonEncode(calculo.toJson());
+    if (calculosStringList != null) {
+      calculosStringList.add(newCalculoString);
+      await prefs.setStringList(calculosKey, calculosStringList);
+    } else {
+      await prefs.setStringList(calculosKey, [newCalculoString]);
+    }
   }
 
   Future<List<CalculoIMCModel>> loadCalculos() async {
     final prefs = await SharedPreferences.getInstance();
-    final calculosStringList = prefs.getStringList(calculosKey);
-    if (calculosStringList != null) {
-      return calculosStringList
-          .map((jsonString) => CalculoIMCModel.fromJson(jsonDecode(jsonString)))
-          .toList();
-    }
-    return [];
+    final calculosStringList = prefs.getStringList(calculosKey) ?? [];
+    return calculosStringList
+        .map((jsonString) => CalculoIMCModel.fromJson(jsonDecode(jsonString)))
+        .toList();
   }
 
   Future<void> deleteCalculo(CalculoIMCModel calculo) async {
     final prefs = await SharedPreferences.getInstance();
     List<CalculoIMCModel> calculos = await loadCalculos();
-    calculos.remove(calculo);
-    final List<String> jsonStringList =
-        calculos.map((calculo) => jsonEncode(calculo.toJson())).toList();
-    prefs.setStringList(calculosKey, jsonStringList);
+    calculos.removeWhere((c) => c.imcResultado == calculo.imcResultado);
+    await saveCalculos(calculos);
   }
 }
