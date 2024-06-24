@@ -1,0 +1,98 @@
+[
+  {
+    "id": "H_O_III",
+    "sexo": "h",
+    "faixa_inicio": 40.0,
+    "faixa_fim": null,
+    "classificacao": "Obesidade grau III",
+    "descricao": "Aqui o sinal é vermelho, com forte probabilidade de já existirem doenças muito graves associadas. O tratamento deve ser ainda mais urgente."
+  },
+  {
+    "id": "H_O_II",
+    "sexo": "h",
+    "faixa_inicio": 35.0,
+    "faixa_fim": 39.9,
+    "classificacao": "Obesidade grau II",
+    "descricao": "Mesmo que seus exames aparentem estar normais, é hora de se cuidar, iniciando mudanças no estilo de vida com o acompanhamento próximo de profissionais de saúde."
+  },
+  {
+    "id": "H_O_I",
+    "sexo": "h",
+    "faixa_inicio": 30.0,
+    "faixa_fim": 34.9,
+    "classificacao": "Obesidade grau I",
+    "descricao": "Sinal de alerta! Chegou na hora de se cuidar, mesmo que seus exames sejam normais. Vamos dar início a mudanças hoje! Cuide de sua alimentação. Você precisa iniciar um acompanhamento com nutricionista e/ou endocrinologista."
+  },
+  {
+    "id": "H_S",
+    "sexo": "h",
+    "faixa_inicio": 25.0,
+    "faixa_fim": 29.9,
+    "classificacao": "Sobrepeso",
+    "descricao": "Ele é, na verdade, uma pré-obesidade e muitas pessoas nessa faixa já apresentam doenças associadas, como diabetes e hipertensão. Importante rever hábitos e buscar ajuda antes de, por uma série de fatores, entrar na faixa da obesidade pra valer."
+  },
+  {
+    "id": "H_N",
+    "sexo": "h",
+    "faixa_inicio": 18.6,
+    "faixa_fim": 24.9,
+    "classificacao": "Normal",
+    "descricao": "Que bom que você está com o peso normal! E o melhor jeito de continuar assim é mantendo um estilo de vida ativo e uma alimentação equilibrada."
+  },
+  {
+    "id": "H_A",
+    "sexo": "h",
+    "faixa_inicio": 0.0,
+    "faixa_fim": 18.5,
+    "classificacao": "Abaixo do normal",
+    "descricao": "Procure um médico. Algumas pessoas têm um baixo peso por características do seu organismo e tudo bem. Outras podem estar enfrentando problemas, como a desnutrição. É preciso saber qual é o caso."
+  },
+  {
+    "id": "M_O_III",
+    "sexo": "m",
+    "faixa_inicio": 40.0,
+    "faixa_fim":null,
+    "classificacao": "Obesidade grau III",
+    "descricao": "Aqui o sinal é vermelho, com forte probabilidade de já existirem doenças muito graves associadas. O tratamento deve ser ainda mais urgente."
+  },
+  {
+    "id": "M_O_II",
+    "sexo": "m",
+    "faixa_inicio": 35.0,
+    "faixa_fim": 39.9,
+    "classificacao": "Obesidade grau II",
+    "descricao": "Mesmo que seus exames aparentem estar normais, é hora de se cuidar, iniciando mudanças no estilo de vida com o acompanhamento próximo de profissionais de saúde."
+  },
+  {
+    "id": "M_O_I",
+    "sexo": "m",
+    "faixa_inicio": 30.0,
+    "faixa_fim": 34.9,
+    "classificacao": "Obesidade grau I",
+    "descricao": "Sinal de alerta! Chegou na hora de se cuidar, mesmo que seus exames sejam normais. Vamos dar início a mudanças hoje! Cuide de sua alimentação. Você precisa iniciar um acompanhamento com nutricionista e/ou endocrinologista."
+  },
+  {
+    "id": "M_S",
+    "sexo": "m",
+    "faixa_inicio": 25.0,
+    "faixa_fim": 29.9,
+    "classificacao": "Sobrepeso",
+    "descricao": "Ele é, na verdade, uma pré-obesidade e muitas pessoas nessa faixa já apresentam doenças associadas, como diabetes e hipertensão. Importante rever hábitos e buscar ajuda antes de, por uma série de fatores, entrar na faixa da obesidade pra valer."
+  },
+  {
+    "id": "M_N",
+    "sexo": "m",
+    "faixa_inicio": 18.6,
+    "faixa_fim": 24.9,
+    "classificacao": "Normal",
+    "descricao": "Que bom que você está com o peso normal! E o melhor jeito de continuar assim é mantendo um estilo de vida ativo e uma alimentação equilibrada."
+  },
+  {
+    "id": "M_A",
+    "sexo": "m",
+    "faixa_inicio": 0.0,
+    "faixa_fim": 18.5,
+    "classificacao": "Abaixo do normal",
+    "descricao": "Procure um médico. Algumas pessoas têm um baixo peso por características do seu organismo e tudo bem. Outras podem estar enfrentando problemas, como a desnutrição. É preciso saber qual é o caso."
+  }
+]
