@@ -1,6 +1,6 @@
 import 'package:calculadora_imc/components/menu.dart';
 import 'package:flutter/material.dart';
-import 'package:calculadora_imc/screens/AddPersonScreen.dart';
+import 'package:calculadora_imc/screens/personScreen.dart';
 import 'package:calculadora_imc/screens/CalculoIMCScreen.dart';
 import 'package:calculadora_imc/screens/dadosIMC.dart';
 import 'package:calculadora_imc/screens/HistoricoScreen.dart';
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('IMC Calculator'),
+        title: const Text('Calculadora de IMC'),
       ),
       drawer: const DrawerMenu(),
       body: Center(

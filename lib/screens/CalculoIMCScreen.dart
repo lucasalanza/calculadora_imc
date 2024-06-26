@@ -11,6 +11,7 @@ import '../models/pessoaModel.dart';
 import '../models/calculoIMCModel.dart';
 import '../services/SharedPreferencesService.dart';
 import '../screens/AddPersonScreen.dart';
+import 'personScreen.dart';
 
 class CalculoIMCScreen extends StatefulWidget {
   const CalculoIMCScreen({Key? key}) : super(key: key);
@@ -88,6 +89,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const AddPersonScreen()),
+                          builder: (context) => const PersonScreen()),
                     ).then((_) {
                       _loadData();
                     });

@@ -6,14 +6,14 @@ import '../models/calculoIMCModel.dart';
 import '../models/pessoaModel.dart';
 import '../services/SharedPreferencesService.dart';
 
-class AddPersonScreen extends StatefulWidget {
-  const AddPersonScreen({super.key});
+class PersonScreen extends StatefulWidget {
+  const PersonScreen({super.key});
 
   @override
-  _AddPersonScreenState createState() => _AddPersonScreenState();
+  _PersonScreenState createState() => _PersonScreenState();
 }
 
-class _AddPersonScreenState extends State<AddPersonScreen> {
+class _PersonScreenState extends State<PersonScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _alturaController = TextEditingController();
@@ -128,14 +128,38 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
 
       await _prefsService.savePessoas(_pessoas);
       _loadPessoas();
-
       Navigator.pop(context);
     }
   }
 
-  Future<void> _deletePessoa(PessoaModel pessoa) async {
-    await _prefsService.deletePessoa(pessoa);
-    _loadPessoas();
+  Future<bool?> _confirmDeletePessoa(PessoaModel pessoa) async {
+    final confirmDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: const Text('Você tem certeza que deseja excluir esta pessoa?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmDelete == true) {
+      await _prefsService.deletePessoa(pessoa);
+      _loadPessoas();
+    }
+    return confirmDelete;
   }
 
   @override
@@ -213,9 +237,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                   return Dismissible(
                     key: Key(pessoa.id.toString()),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      _deletePessoa(pessoa);
-                    },
+                    confirmDismiss: (direction) => _confirmDeletePessoa(pessoa),
                     background: Container(
                       color: Colors.red,
                       alignment: Alignment.centerRight,
