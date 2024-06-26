@@ -10,7 +10,6 @@ import 'dart:math';
 import '../models/pessoaModel.dart';
 import '../models/calculoIMCModel.dart';
 import '../services/SharedPreferencesService.dart';
-import '../screens/AddPersonScreen.dart';
 import 'personScreen.dart';
 
 class CalculoIMCScreen extends StatefulWidget {
@@ -26,7 +25,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
   PessoaModel? selectedPessoa;
   final _pesoController = TextEditingController();
   String? imcResultado, imcResultadoFaixa;
-  List<CalculoIMCModel> calculos = [];
+  late CalculoIMCModel calculo, novoCalculo;
 
   @override
   void initState() {
@@ -52,126 +51,138 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
         title: const Text('Calcular IMC'),
       ),
       drawer: const DrawerMenu(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Calcular IMC para ',
-              style: TextStyle(fontSize: 22),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<PessoaModel>(
-                    value: selectedPessoa,
-                    items: listaPessoas?.map((item) {
-                      return DropdownMenuItem<PessoaModel>(
-                        value: item,
-                        child: Text(
-                            '${item.nome.split(' ').first} - ${item.altura}'),
-                      );
-                    }).toList(),
-                    onChanged: (PessoaModel? newValue) {
-                      setState(() {
-                        selectedPessoa = newValue;
-                        _pesoController.text = "";
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Escolha a pessoa',
+                style: TextStyle(fontSize: 18),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<PessoaModel>(
+                      value: selectedPessoa,
+                      items: listaPessoas?.map((item) {
+                        return DropdownMenuItem<PessoaModel>(
+                          value: item,
+                          child: Text(
+                              '${item.nome.split(' ').first} - ${item.altura.toString().replaceAll('.', ',')}m'),
+                        );
+                      }).toList(),
+                      onChanged: (PessoaModel? newValue) {
+                        setState(() {
+                          selectedPessoa = newValue;
+                          _pesoController.text = "";
+                        });
+                      },
+                      hint: const Text('Selecione uma pessoa'),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PersonScreen()),
+                      ).then((_) {
+                        _loadData();
                       });
                     },
-                    hint: const Text('Selecione uma pessoa'),
+                    child: const Text('+ Pessoa'),
                   ),
+                ],
+              ),
+              if (selectedPessoa != null) ...[
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Text(
+                      'Selecionado:',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                      width: 20,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                            '${selectedPessoa!.nome} (${selectedPessoa!.sexo.toString().split('.')[1]})'),
+                        Text(
+                            'Altura: ${selectedPessoa!.altura.toString().replaceAll('.', ',')}m'),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+              TextField(
+                controller: _pesoController,
+                decoration: const InputDecoration(labelText: 'Peso (kg)'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(
+                height: 22,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _calculateIMC();
+                },
+                child: const Text('Calcular IMC'),
+              ),
+              if (imcResultado != null) ...[
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    Text(novoCalculo.sexo.toString().split('.')[1]),
+                    Text(
+                        ' Peso: ${novoCalculo.peso}  Altura: ${selectedPessoa!.altura.toString().replaceAll('.', ',')}m'),
+                  ],
+                ),
+                Text(
+                  'IMC calculado: $imcResultado',
+                  style: const TextStyle(fontSize: 22),
+                ),
+                IMCCard(
+                  faixaImcModel: faixaImcList
+                      .where((x) => x.id == calculo.faixaImcId)
+                      .first,
+                ),
+                const SizedBox(
+                  height: 22,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AddPersonScreen()),
-                          builder: (context) => const PersonScreen()),
-                    ).then((_) {
-                      _loadData();
-                    });
+                          builder: (context) => const dadosImcScreen()),
+                    );
                   },
-                  child: const Text('+ Pessoa'),
+                  child: const Text('Entenda os Resultados'),
                 ),
               ],
-            ),
-            if (selectedPessoa != null) ...[
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  const Text(
-                    'Selecionado:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                    width: 20,
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                          '${selectedPessoa!.nome} (${selectedPessoa!.sexo.toString().split('.')[1]})'),
-                      Text('Altura: ${selectedPessoa!.altura}m'),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _pesoController,
-                    decoration: const InputDecoration(labelText: 'Peso (kg)'),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _calculateIMC();
-                  },
-                  child: const Text('Calcular'),
-                ),
-              ],
-            ),
-            if (imcResultado != null) ...[
-              const SizedBox(height: 20),
-              Text(
-                'IMC calculado: $imcResultado',
-                style: const TextStyle(fontSize: 22),
-              ),
-              IMCCard(
-                faixaImcModel: faixaImcList
-                    .where((x) => x.id == calculos.first.faixaImcId)
-                    .first,
+              const SizedBox(
+                height: 22,
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const dadosImcScreen()),
+                      builder: (context) =>
+                          HistoricoScreen(pessoaId: selectedPessoa?.id ?? 0),
+                    ),
                   );
                 },
-                child: const Text('Entenda os Resultados'),
+                child: const Text('Ver Histórico'),
               ),
             ],
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        HistoricoScreen(pessoaId: selectedPessoa!.id),
-                  ),
-                );
-              },
-              child: const Text('Ver Histórico'),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -183,7 +194,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
       final altura = selectedPessoa!.altura;
 
       final prefsService = SharedPreferencesService();
-      final novoCalculo = CalculoIMCModel(
+      novoCalculo = CalculoIMCModel(
         pessoaId: selectedPessoa!.id,
         altura: altura,
         sexo: selectedPessoa!.sexo,
@@ -191,12 +202,14 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
         dataCalculo: DateTime.now(),
       );
       novoCalculo.calculaImc();
+      prefsService.saveCalculo(novoCalculo);
 
       setState(() {
+        calculo = novoCalculo;
         imcResultado = novoCalculo.imcResultado!.toStringAsFixed(2);
+        _pesoController.text = '';
+        selectedPessoa = null;
       });
-
-      await prefsService.saveCalculo(novoCalculo);
     }
   }
 }

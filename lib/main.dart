@@ -1,8 +1,6 @@
 import 'package:calculadora_imc/screens/dadosIMC.dart';
 import 'package:calculadora_imc/screens/home.dart';
-
 import 'package:flutter/material.dart';
-
 import 'services/imcService.dart';
 
 Future<void> main() async {
@@ -22,7 +20,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 194, 191, 11)),
+            seedColor: const Color.fromRGBO(195, 200, 200, 0.612)),
+        //const Color.fromARGB(255, 194, 191, 11)),
         useMaterial3: true,
       ),
       // home: const dadosImcScreen(),

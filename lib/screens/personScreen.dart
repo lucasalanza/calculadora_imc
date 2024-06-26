@@ -20,7 +20,7 @@ class _PersonScreenState extends State<PersonScreen> {
   Sexo? _sexoSelecionado = Sexo.homem;
 
   List<PessoaModel> _pessoas = [];
-  SharedPreferencesService _prefsService = SharedPreferencesService();
+  final SharedPreferencesService _prefsService = SharedPreferencesService();
 
   @override
   void initState() {
@@ -43,13 +43,13 @@ class _PersonScreenState extends State<PersonScreen> {
 
   void _editPessoa(PessoaModel pessoa) {
     _nomeController.text = pessoa.nome;
-    _alturaController.text = pessoa.altura.toString();
+    _alturaController.text = pessoa.altura.toString().replaceAll('.', ',');
     _sexoSelecionado = pessoa.sexo;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Editar Pessoa'),
+        title: const Text('Editar Pessoa'),
         content: Form(
           key: _formKey,
           child: Column(
@@ -123,7 +123,7 @@ class _PersonScreenState extends State<PersonScreen> {
   Future<void> _saveEditPessoa(PessoaModel pessoa) async {
     if (_formKey.currentState!.validate()) {
       pessoa.nome = _nomeController.text;
-      pessoa.altura = double.parse(_alturaController.text);
+      pessoa.altura = double.parse(_alturaController.text.replaceAll(',', '.'));
       pessoa.sexo = _sexoSelecionado!;
 
       await _prefsService.savePessoas(_pessoas);
@@ -162,11 +162,32 @@ class _PersonScreenState extends State<PersonScreen> {
     return confirmDelete;
   }
 
+  void _showSexoInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Informação'),
+        content: const Text(
+          'A escolha do sexo é utilizada para definir em qual faixa o resultado deve ser enquadrado. '
+          'Saiba mais na tela "Entenda os Resultados" ',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastrar Nova Pessoa'),
+        title: const Text('Pessoas'),
       ),
       drawer: const DrawerMenu(),
       body: Padding(
@@ -176,16 +197,16 @@ class _PersonScreenState extends State<PersonScreen> {
             Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFormField(
-                    controller: _nomeController,
-                    decoration: const InputDecoration(labelText: 'Nome'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira o nome';
-                      }
-                      return null;
-                    },
+                  Row(
+                    children: [
+                      const Text("Sexo"),
+                      IconButton(
+                        icon: const Icon(Icons.help_outline),
+                        onPressed: _showSexoInfo,
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -211,6 +232,16 @@ class _PersonScreenState extends State<PersonScreen> {
                     ],
                   ),
                   TextFormField(
+                    controller: _nomeController,
+                    decoration: const InputDecoration(labelText: 'Nome'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira o nome';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
                     controller: _alturaController,
                     decoration: const InputDecoration(labelText: 'Altura (m)'),
                     keyboardType: TextInputType.number,
@@ -221,6 +252,9 @@ class _PersonScreenState extends State<PersonScreen> {
                       return null;
                     },
                   ),
+                  SizedBox(
+                    height: 12,
+                  ),
                   ElevatedButton(
                     onPressed: _addPerson,
                     child: const Text('Cadastrar'),
@@ -229,6 +263,7 @@ class _PersonScreenState extends State<PersonScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            const Text("Pessoas cadastradas"),
             Expanded(
               child: ListView.builder(
                 itemCount: _pessoas.length,
@@ -249,7 +284,9 @@ class _PersonScreenState extends State<PersonScreen> {
                     ),
                     child: ListTile(
                       title: Text(pessoa.nome),
-                      subtitle: Text('Altura: ${pessoa.altura} m'),
+                      subtitle: Text(
+                        'Altura: ${pessoa.altura.toString().replaceAll('.', ',')}\nSexo: ${pessoa.sexo == Sexo.homem ? 'Homem' : 'Mulher'}',
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () {
@@ -273,7 +310,7 @@ class _PersonScreenState extends State<PersonScreen> {
         id: DateTime.now().millisecondsSinceEpoch,
         nome: _nomeController.text,
         sexo: _sexoSelecionado!,
-        altura: double.parse(_alturaController.text),
+        altura: double.parse(_alturaController.text.replaceAll(',', '.')),
       );
 
       final prefsService = SharedPreferencesService();
