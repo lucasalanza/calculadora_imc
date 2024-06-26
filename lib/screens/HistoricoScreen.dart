@@ -1,3 +1,4 @@
+import 'package:calculadora_imc/components/menu.dart';
 import 'package:flutter/material.dart';
 import '../models/calculoIMCModel.dart';
 import '../services/SharedPreferencesService.dart';
@@ -53,6 +54,7 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
       appBar: AppBar(
         title: const Text('Histórico de Cálculos'),
       ),
+      drawer: const DrawerMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

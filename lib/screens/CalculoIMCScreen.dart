@@ -1,4 +1,5 @@
 import 'package:calculadora_imc/components/IMCCard.dart';
+import 'package:calculadora_imc/components/menu.dart';
 import 'package:calculadora_imc/models/faixaImcModel.dart';
 import 'package:calculadora_imc/screens/HistoricoScreen.dart';
 import 'package:calculadora_imc/screens/dadosIMC.dart';
@@ -49,6 +50,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
       appBar: AppBar(
         title: const Text('Calcular IMC'),
       ),
+      drawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

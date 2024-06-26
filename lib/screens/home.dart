@@ -1,8 +1,10 @@
+import 'package:calculadora_imc/components/menu.dart';
+import 'package:flutter/material.dart';
 import 'package:calculadora_imc/screens/AddPersonScreen.dart';
 import 'package:calculadora_imc/screens/CalculoIMCScreen.dart';
 import 'package:calculadora_imc/screens/dadosIMC.dart';
-import 'package:flutter/material.dart';
-import 'HistoricoScreen.dart';
+import 'package:calculadora_imc/screens/HistoricoScreen.dart';
+import 'package:calculadora_imc/screens/SobreScreen.dart';
 import '../models/pessoaModel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // _loadPessoas();
+    _loadPessoas();
   }
 
   Future<void> _loadPessoas() async {
@@ -35,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('IMC Calculator'),
       ),
+      drawer: const DrawerMenu(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,28 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               child: const Text('Calcular IMC'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const HistoricoScreen(
-                            pessoaId: 0,
-                          )),
-                );
-              },
-              child: const Text('Histórico de Cálculos'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const dadosImcScreen()),
-                );
-              },
-              child: const Text('Entenda os Resultados'),
             ),
           ],
         ),

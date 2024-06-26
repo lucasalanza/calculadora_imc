@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, camel_case_types, constant_identifier_names
 
 import 'package:calculadora_imc/components/IMCCard.dart';
+import 'package:calculadora_imc/components/menu.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,7 @@ class _dadosImcScreenState extends State<dadosImcScreen> {
       appBar: AppBar(
         title: const Text('Entenda os resultados'),
       ),
+      drawer: const DrawerMenu(),
       body: Center(
         child: Column(
           children: [

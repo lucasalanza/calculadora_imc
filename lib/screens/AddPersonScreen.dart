@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:calculadora_imc/components/menu.dart';
 import 'package:flutter/material.dart';
 import '../models/calculoIMCModel.dart';
 import '../models/pessoaModel.dart';
@@ -143,6 +144,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
       appBar: AppBar(
         title: const Text('Cadastrar Nova Pessoa'),
       ),
+      drawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
