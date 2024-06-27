@@ -33,11 +33,6 @@ class _sobreScreenState extends State<sobreScreen> {
             Center(
               child: Column(
                 children: [
-                  const Text(
-                    'Dados do App e do Desenvolvedor',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
                   const SizedBox(height: 20),
                   const Text(
                     'Este aplicativo foi desenvolvido para calcular o Índice de Massa Corporal (IMC) e fornecer informações sobre a saúde com base nos resultados obtidos. É importante lembrar que as informações apresentadas aqui não substituem o acompanhamento médico. Consulte um profissional de saúde para orientações específicas.',
@@ -62,17 +57,6 @@ class _sobreScreenState extends State<sobreScreen> {
                       height: 100,
                     ),
                   ),
-                  // const SizedBox(height: 10),
-                  // InkWell(
-                  //   onTap: () => _launchURL('https://lucasalanza.github.io/'),
-                  //   child: const Text(
-                  //     'Acesse nosso site',
-                  //     style: TextStyle(
-                  //         fontSize: 16,
-                  //         color: Colors.blue,
-                  //         decoration: TextDecoration.underline),
-                  //   ),
-                  // ),
                   const SizedBox(height: 10),
                   const Text(
                     'Todas as informações do aplicativo foram retiradas do Site da Abeso ',
