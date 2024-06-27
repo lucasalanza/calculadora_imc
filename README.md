@@ -8,22 +8,18 @@ Todas as informações do aplicativo foram retiradas do site da Abeso: [Calculad
 
 ## Capturas de Tela
 
-### Logo
-![logo](assets/imgs/logoimc.png)
-
 ### Tela Inicial
 ![Tela Inicial](assets/imgs/home.jpeg)
 
 ### Calcular IMC
-![Calcular IMC](assets/imgs/calculo.jpeg)
-![Calcular IMC](assets/imgs/resultado.jpeg)
+![Calcular IMC](assets/imgs/calculo.jpeg) ![Resultado calculo](assets/imgs/resultado.jpeg)
 
 ### Cadastrar Pessoa
 ![Cadastrar Pessoa](assets/imgs/listapessoas.jpeg)
-![Cadastrar Pessoa](assets/imgs/addpessoas.jpeg)
+![Cadastrar Pessoa](assets/imgs/addpessoa.jpeg)
 
 ### Histórico de Cálculos
-![Histórico de Cálculos](assets/imgs/historico.jpeg)
+![Histórico de Cálculos](assets/imgs/Historico.jpeg)
 
 ### Sobre o App
-![Sobre o App](assets/sobre.jpeg)
+![Sobre o App](assets/imgs/sobre.jpeg)
