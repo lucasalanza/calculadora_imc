@@ -32,9 +32,16 @@ class SharedPreferencesService {
 
   Future<void> deletePessoa(PessoaModel pessoa) async {
     final prefs = await SharedPreferences.getInstance();
+
+    // Remove a pessoa da lista de pessoas
     List<PessoaModel> pessoas = await loadPessoas();
     pessoas.removeWhere((p) => p.id == pessoa.id);
     await savePessoas(pessoas);
+
+    // Remove os cálculos associados à pessoa
+    List<CalculoIMCModel> calculos = await loadCalculos();
+    calculos.removeWhere((c) => c.pessoaId == pessoa.id);
+    await saveCalculos(calculos);
   }
 
   Future<void> saveCalculos(List<CalculoIMCModel> calculos) async {

@@ -1,3 +1,4 @@
+import 'package:calculadora_imc/components/bannerAdmob.dart';
 import 'package:calculadora_imc/components/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:calculadora_imc/screens/personScreen.dart';
@@ -103,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: const Text('Calcular IMC'),
                     ),
+                    const BannerAds(),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:calculadora_imc/screens/HistoricoScreen.dart';
 import 'package:calculadora_imc/screens/dadosIMC.dart';
 import 'package:calculadora_imc/services/imcService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math';
 
 import '../models/pessoaModel.dart';
@@ -123,7 +124,10 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
               TextField(
                 controller: _pesoController,
                 decoration: const InputDecoration(labelText: 'Peso (kg)'),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\,?\d*$')),
+                ],
               ),
               const SizedBox(
                 height: 22,

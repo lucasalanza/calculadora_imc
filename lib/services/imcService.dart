@@ -35,4 +35,9 @@ class ImcService {
     if (_faixaImcList == []) loadImcData();
     return _faixaImcList.where((x) => idfaixa == x.id).first.descricao;
   }
+
+  static String retornaClassificacaoFaixaIMC(String idfaixa) {
+    if (_faixaImcList == []) loadImcData();
+    return _faixaImcList.where((x) => idfaixa == x.id).first.classificacao;
+  }
 }

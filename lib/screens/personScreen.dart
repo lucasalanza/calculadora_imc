@@ -1,8 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:calculadora_imc/components/menu.dart';
+import 'package:calculadora_imc/models/calculoIMCModel.dart';
+import 'package:calculadora_imc/screens/CalculoIMCScreen.dart';
 import 'package:flutter/material.dart';
-import '../models/calculoIMCModel.dart';
+import 'package:flutter/services.dart';
 import '../models/pessoaModel.dart';
 import '../services/SharedPreferencesService.dart';
 
@@ -41,66 +43,93 @@ class _PersonScreenState extends State<PersonScreen> {
     });
   }
 
-  void _editPessoa(PessoaModel pessoa) {
-    _nomeController.text = pessoa.nome;
-    _alturaController.text = pessoa.altura.toString().replaceAll('.', ',');
-    _sexoSelecionado = pessoa.sexo;
+  void _showModal({PessoaModel? pessoa}) {
+    if (pessoa != null) {
+      _nomeController.text = pessoa.nome;
+      _alturaController.text = pessoa.altura.toString().replaceAll('.', ',');
+      _sexoSelecionado = pessoa.sexo;
+    } else {
+      _nomeController.clear();
+      _alturaController.clear();
+      _sexoSelecionado = Sexo.homem;
+    }
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Editar Pessoa'),
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _nomeController,
-                decoration: const InputDecoration(labelText: 'Nome'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o nome';
-                  }
-                  return null;
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Radio<Sexo>(
-                    value: Sexo.homem,
-                    activeColor: const Color.fromARGB(255, 16, 101, 171),
-                    groupValue: _sexoSelecionado,
-                    onChanged: (Sexo? value) {
-                      _trocaSexoExibido(value);
+        title: Text(pessoa != null ? 'Editar Pessoa' : 'Adicionar Pessoa'),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      const Text("Sexo"),
+                      IconButton(
+                        icon: const Icon(Icons.help_outline),
+                        onPressed: _showSexoInfo,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Radio<Sexo>(
+                        value: Sexo.homem,
+                        activeColor: const Color.fromARGB(255, 16, 101, 171),
+                        groupValue: _sexoSelecionado,
+                        onChanged: (Sexo? value) {
+                          setState(() {
+                            _trocaSexoExibido(value);
+                          });
+                        },
+                      ),
+                      const Text('Homem'),
+                      Radio<Sexo>(
+                        activeColor: const Color.fromARGB(199, 188, 21, 77),
+                        value: Sexo.mulher,
+                        groupValue: _sexoSelecionado,
+                        onChanged: (Sexo? value) {
+                          setState(() {
+                            _trocaSexoExibido(value);
+                          });
+                        },
+                      ),
+                      const Text('Mulher'),
+                    ],
+                  ),
+                  TextFormField(
+                    controller: _nomeController,
+                    decoration: const InputDecoration(labelText: 'Nome'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira o nome';
+                      }
+                      return null;
                     },
                   ),
-                  const Text('Homem'),
-                  Radio<Sexo>(
-                    activeColor: const Color.fromARGB(199, 188, 21, 77),
-                    value: Sexo.mulher,
-                    groupValue: _sexoSelecionado,
-                    onChanged: (Sexo? value) {
-                      _trocaSexoExibido(value);
+                  TextFormField(
+                    controller: _alturaController,
+                    decoration: const InputDecoration(labelText: 'Altura (m)'),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\,?\d*$')),
+                    ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira a altura';
+                      }
+                      return null;
                     },
                   ),
-                  const Text('Mulher'),
                 ],
               ),
-              TextFormField(
-                controller: _alturaController,
-                decoration: const InputDecoration(labelText: 'Altura (m)'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira a altura';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
         actions: [
           TextButton(
@@ -111,7 +140,11 @@ class _PersonScreenState extends State<PersonScreen> {
           ),
           TextButton(
             onPressed: () {
-              _saveEditPessoa(pessoa);
+              if (pessoa != null) {
+                _saveEditPessoa(pessoa);
+              } else {
+                _addPerson();
+              }
             },
             child: const Text('Salvar'),
           ),
@@ -127,6 +160,23 @@ class _PersonScreenState extends State<PersonScreen> {
       pessoa.sexo = _sexoSelecionado!;
 
       await _prefsService.savePessoas(_pessoas);
+      _loadPessoas();
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _addPerson() async {
+    if (_formKey.currentState!.validate()) {
+      final newPerson = PessoaModel(
+        id: DateTime.now().millisecondsSinceEpoch,
+        nome: _nomeController.text,
+        sexo: _sexoSelecionado!,
+        altura: double.parse(_alturaController.text.replaceAll(',', '.')),
+      );
+
+      _pessoas.add(newPerson);
+      await _prefsService.savePessoas(_pessoas);
+
       _loadPessoas();
       Navigator.pop(context);
     }
@@ -194,73 +244,26 @@ class _PersonScreenState extends State<PersonScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Text("Sexo"),
-                      IconButton(
-                        icon: const Icon(Icons.help_outline),
-                        onPressed: _showSexoInfo,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio<Sexo>(
-                        value: Sexo.homem,
-                        activeColor: const Color.fromARGB(255, 16, 101, 171),
-                        groupValue: _sexoSelecionado,
-                        onChanged: (Sexo? value) {
-                          _trocaSexoExibido(value);
-                        },
-                      ),
-                      const Text('Homem'),
-                      Radio<Sexo>(
-                        activeColor: const Color.fromARGB(199, 188, 21, 77),
-                        value: Sexo.mulher,
-                        groupValue: _sexoSelecionado,
-                        onChanged: (Sexo? value) {
-                          _trocaSexoExibido(value);
-                        },
-                      ),
-                      const Text('Mulher'),
-                    ],
-                  ),
-                  TextFormField(
-                    controller: _nomeController,
-                    decoration: const InputDecoration(labelText: 'Nome'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira o nome';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _alturaController,
-                    decoration: const InputDecoration(labelText: 'Altura (m)'),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira a altura';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  ElevatedButton(
-                    onPressed: _addPerson,
-                    child: const Text('Cadastrar'),
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _showModal();
+                  },
+                  child: const Text('Adicionar Pessoa'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CalculoIMCScreen()),
+                    );
+                  },
+                  child: const Text('Novo Cálculo'),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             const Text("Pessoas cadastradas"),
@@ -290,7 +293,7 @@ class _PersonScreenState extends State<PersonScreen> {
                       trailing: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () {
-                          _editPessoa(pessoa);
+                          _showModal(pessoa: pessoa);
                         },
                       ),
                     ),
@@ -302,25 +305,5 @@ class _PersonScreenState extends State<PersonScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _addPerson() async {
-    if (_formKey.currentState!.validate()) {
-      final newPerson = PessoaModel(
-        id: DateTime.now().millisecondsSinceEpoch,
-        nome: _nomeController.text,
-        sexo: _sexoSelecionado!,
-        altura: double.parse(_alturaController.text.replaceAll(',', '.')),
-      );
-
-      final prefsService = SharedPreferencesService();
-      await prefsService.savePessoa(newPerson);
-
-      _nomeController.clear();
-      _alturaController.clear();
-      _sexoSelecionado = Sexo.homem;
-
-      _loadPessoas();
-    }
   }
 }

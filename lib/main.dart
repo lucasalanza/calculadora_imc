@@ -1,11 +1,13 @@
 import 'package:calculadora_imc/screens/dadosIMC.dart';
 import 'package:calculadora_imc/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'services/imcService.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ImcService.loadImcData();
+  await MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
