@@ -9,17 +9,25 @@ Todas as informações do aplicativo foram retiradas do site da Abeso: [Calculad
 ## Capturas de Tela
 
 ### Tela Inicial
-![Tela Inicial](assets/imgs/home.jpeg)
+<img src="assets/imgs/home.jpeg" alt="Tela Inicial" width="300"/>
 
 ### Calcular IMC
-![Calcular IMC](assets/imgs/calculo.jpeg) ![Resultado calculo](assets/imgs/resultado.jpeg)
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="assets/imgs/calculo.jpeg" alt="Calcular IMC" width="300"/>
+  <img src="assets/imgs/resultado.jpeg" alt="Resultado calculo" width="300"/>
+</div>
 
 ### Cadastrar Pessoa
-![Cadastrar Pessoa](assets/imgs/listapessoas.jpeg)
-![Cadastrar Pessoa](assets/imgs/addpessoa.jpeg)
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="assets/imgs/listapessoas.jpeg" alt="Cadastrar Pessoa" width="300"/>
+  <img src="assets/imgs/addpessoa.jpeg" alt="Adicionar Pessoa" width="300"/>
+</div>
 
-### Histórico de Cálculos
-![Histórico de Cálculos](assets/imgs/Historico.jpeg)
 
-### Sobre o App
-![Sobre o App](assets/imgs/sobre.jpeg)
+### Histórico de Cálculos / Sobre o App
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="assets/imgs/Historico.jpeg" alt="Histórico de Cálculos" width="300"/>
+<img src="assets/imgs/sobre.jpeg" alt="Sobre o App" width="300"/>
+
+
+</div>
