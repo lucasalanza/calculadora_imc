@@ -140,7 +140,7 @@ class _CalculoIMCScreenState extends State<CalculoIMCScreen> {
                   children: [
                     Text(novoCalculo.sexo.toString().split('.')[1]),
                     Text(
-                        ' Peso: ${novoCalculo.peso}  Altura: ${selectedPessoa!.altura.toString().replaceAll('.', ',')}m'),
+                        ' Peso: ${novoCalculo.peso}  Altura: ${novoCalculo.altura.toString().replaceAll('.', ',')}m'),
                   ],
                 ),
                 Text(
